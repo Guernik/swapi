@@ -3,4 +3,5 @@ otp_release:
   - 22.0
 
 script:
+  - erlc src/http_reqs.erl src/utils.erl src/sw_data.erl
   - rebar3 eunit
