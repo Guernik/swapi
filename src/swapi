@@ -7,10 +7,11 @@
 main(Args) when length(Args) =:= 2 ->
   code:add_path("deps/jiffy/_build/default/lib/jiffy/ebin"),
   start_inet_sll(),      
-  %FilmList = get_film_list_for_chars(Args),
-  %io:format("~p~n",[FilmList]);
-  L = get_film_map_list(),
-  io:format("~p~n",[L]);
+  FilmIdList = get_film_list_for_chars(Args),
+  IdTitleMap = get_film_map_list(),
+  OutList = [maps:get(F,IdTitleMap) || F <- FilmIdList],
+  OutStringList = [binary_to_list(X) || X <- OutList ],  
+  [io:format("~s~n",[X]) || X <- OutStringList];  
 
 main(_Args) ->
   usage().
