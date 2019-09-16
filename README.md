@@ -1,5 +1,6 @@
 # SWAPI
-  TODO badgee  
+  [![Build Status](https://www.travis-ci.com/Guernik/swapi.svg?branch=master)](https://www.travis-ci.com/Guernik/swapi)  
+  
   Simple erlang application, implemented as [escript](http://erlang.org/doc/man/escript.html), that given two star wars characters, returns a list of movies both have in common.  
   Data sources is [The Star Wars Api](https://swapi.co/)  
 
