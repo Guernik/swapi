@@ -4,18 +4,49 @@
 %%! 
 
 
-main(Args) ->
+main(Args) when length(Args) =:= 2 ->
   code:add_path("deps/jiffy/_build/default/lib/jiffy/ebin"),
-  start_inet_sll(),
-  L = get_character(Args),
-  io:format("~p~n",[L]).
+  start_inet_sll(),    
+  %%CharacterMap = get_character(hd(Args)),
+  %%FilmIdList = get_films_id_from_character_map(CharacterMap),
+  FilmList = get_film_list_for_chars(Args),
+  io:format("~p~n",[FilmList]);
 %%  L = jiffy:decode(<<"{\"foo\": \"bar\"}">>),
+
+main(_Args) ->
+  usage().
+
+usage() ->
+  io:format("usage: swapi Character AnotherCharacter~n"),
+  io:format("ie: swapi luke leia~n"),
+  io:format("    swapi \"luke sky\" leia~n").
 
 
 start_inet_sll() -> 
   inets:start(),
   ssl:start().
 
+get_film_list_for_chars([CharA,CharB]) ->
+  CharacterMapA = get_character(CharA),
+  CharacterMapB = get_character(CharB),
+  FilmIdListA = get_films_id_from_character_map(CharacterMapA),
+  FilmIdListB = get_films_id_from_character_map(CharacterMapB),
+  SetA = sets:from_list(FilmIdListA),
+  SetB = sets:from_list(FilmIdListB),
+  SetC = sets:intersection(SetA,SetB),
+  sets:to_list(SetC).
+  
+
+get_films_id_from_character_map(CharacterMap) ->
+  FilmUriList = maps:get(<<"films">>,CharacterMap),
+  lists:map( fun(FilmUri) -> get_id_from_film_uri(FilmUri) end, FilmUriList).
+  
+  
+get_id_from_film_uri(FilmUri) ->
+  <<"https://swapi.co/api/films/",FullId/binary>> = FilmUri,  
+  Id = lists:droplast(binary_to_list(FullId)),
+  Id. 
+  %% list_to_binary(Id).
 
 %% request_character/1
 %% 
@@ -30,7 +61,10 @@ treat_result(Count,JsonSearchResult,_CharName) when Count =:= 1 ->
   hd(ResultList);
   
 treat_result(Count,_JsonSearchResult, CharName) when Count > 1 ->
-  io:format("More than one posible character for the input ~s~n",[CharName]).
+  io:format("More than one posible character for the input ~p~n",[CharName]);
+
+treat_result(Count,_JsonSearchResult, CharName) when Count =:=  0 ->  
+  io:format("No Star Wars character found for ~p~n",[CharName]).
   
     
 
@@ -43,8 +77,8 @@ do_swapi_co_search(people,Who) ->
 %% More search functions can be added as needed, ie: do_swapi_co_search(films,WhichOne) ...
 
 
-do_swapi_co_get_all_films() ->
-  do_http_get_request([swapi_co_base_url(), <<"films/">>]).
+%% do_swapi_co_get_all_films() ->
+%%   do_http_get_request([swapi_co_base_url(), <<"films/">>]).
 
 
 %% Make a syncronous http request and returns the 
@@ -66,31 +100,11 @@ swapi_co_base_url() ->
 
 
 
+
 escape_spaces(String) ->
   string:replace(String," ", "%20").
 
-test_json_lib() ->
-  jiffy:decode(<<"{\"foo\": \"bar\"}">>).
+%% deep_get( [], Map ) -> Map;
+%% deep_get( [H|T], Map) ->
+%%  deep_get(T, maps:get(H,Map) ).
 
-
-
-%%escape_spaces([]) -> [];
-%%escape_spaces([H|T]) ->
-%%  [escape_spaces(H) | escape_spaces(T) ];
-
-%%escape_spaces(Char) -> 
-%%  case Char of 
-%%   32 ->
-%%  "%20";
-%%  _Else ->
-%%  Char
-%%  end.
-
-
-
-deep_get( [], Map ) -> Map;
-deep_get( [H|T], Map) ->
-  deep_get(T, maps:get(H,Map) ).
-
-console_print(Mesg) ->
-  io:format(Mesg++"~n").
