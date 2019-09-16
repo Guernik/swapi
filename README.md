@@ -2,7 +2,12 @@
   [![Build Status](https://www.travis-ci.com/Guernik/swapi.svg?branch=master)](https://www.travis-ci.com/Guernik/swapi)  
 
   Simple erlang application, implemented as [escript](http://erlang.org/doc/man/escript.html), that given two star wars characters, returns a list of movies both have in common.  
-  Data sources is [The Star Wars Api](https://swapi.co/)  
+  Data sources is [The Star Wars Api](https://swapi.co/).  
+#### Guidelines
+This exercise was done trying to follow as much as possible the following guidelines:  
+    - [Design and coding standards for LambdaClass](https://github.com/lambdaclass/guidelines)  
+    - [Inaka's Erlang Coding Guidelines](https://github.com/inaka/erlang_guidelines)  
+
 
 
 ## Prerequsites
