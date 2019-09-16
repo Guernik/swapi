@@ -72,6 +72,12 @@ swapi $>   Revenge of the Sith
   swapi $>  No Star Wars character found for "Harry Potter"
   swapi $>  No Star Wars character found for "Spock"
   ~~~
+  - Non ambiguous input
+  ~~~
+  swapi $> ./swapi.erl lu da
+  swapi $>   More than one posible character for the input "lu"
+  swapi $>   More than one posible character for the input "da"  
+  ~~~
 
 ### TODO
 - Make http requests async
