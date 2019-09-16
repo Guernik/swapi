@@ -4,6 +4,9 @@
 %%!
 
 
+
+%% main/1
+%% main program function called from the command line
 main(Args) when length(Args) =:= 2 ->
   code:add_path("_build/default/lib/jiffy/ebin"),
   http_reqs:start_inet_sll(),  
@@ -20,12 +23,5 @@ usage() ->
   io:format("usage: swapi Character AnotherCharacter~n"),
   io:format("ie: swapi luke leia~n"),
   io:format("    swapi \"luke sky\" leia~n").
-
-
-
-%% deep_get( [], Map ) -> Map;
-%% deep_get( [H|T], Map) ->
-%%  deep_get(T, maps:get(H,Map) ).
-
 
 

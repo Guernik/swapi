@@ -8,6 +8,8 @@
 
 %% Exported %%
 
+%% get_film_list_for_chars/1
+%% get film ids in common for characters CharA and CharB
 get_film_list_for_chars([CharA,CharB]) ->
   FilmIdListA = case get_character(CharA) of 
     {ok,CharacterMapA} -> get_films_id_from_character_map(CharacterMapA);
@@ -23,6 +25,9 @@ get_film_list_for_chars([CharA,CharB]) ->
   ordsets:to_list(SetC).
 
   
+%% get_film_map_list/0
+%% Ask for the complete collections of films to sw api
+%% and a complete map of id=>title
 get_film_map_list() ->
       {ok,Films} = http_reqs:do_swapi_co_get_all_films(),
       SearchResult = jiffy:decode(Films,[return_maps]),
@@ -35,11 +40,15 @@ get_film_map_list() ->
 
 %% Not exported %%
 
+%% get_films_id_from_character_map/1
+%% create a list of films ids for a given parsed character map
 get_films_id_from_character_map(CharacterMap) ->
   FilmUriList = maps:get(<<"films">>,CharacterMap),
   lists:map( fun(FilmUri) -> get_id_from_film_uri(FilmUri) end, FilmUriList).
   
   
+%% get_id_from_film_uri/1
+%% Parse the film id of the specified FilmUri
 get_id_from_film_uri(FilmUri) ->
   <<"https://swapi.co/api/films/",FullId/binary>> = FilmUri,  
   Id = lists:droplast(binary_to_list(FullId)),
@@ -47,6 +56,10 @@ get_id_from_film_uri(FilmUri) ->
 
 
 
+%% get_character/1
+%% make http request to sw api asking for a specified character
+%% We also validate that the given input only returns a single
+%% character
 get_character(CharacterName) ->
   {ok, Character} = http_reqs:do_swapi_co_search(people,CharacterName),
   JsonSearchResult = jiffy:decode(Character,[return_maps]),  
@@ -67,7 +80,8 @@ treat_result(Count,_JsonSearchResult, CharName) when Count =:=  0 ->
 
 
 
-
+%% get_title_id_map/1 
+%% get a map of id => title from a Film json input
 get_title_id_map(Film) ->
     FilmUri = maps:get(<<"url">>,Film),    
     Id = get_id_from_film_uri(FilmUri),
