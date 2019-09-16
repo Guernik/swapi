@@ -11,14 +11,12 @@ You should have the following installed in your system in order to run this appl
 - [rebar3](https://github.com/erlang/rebar3)
 
 ### Dependencies
-  Jiffy 1.0.1 is used as json parser.
-  It is already included in the repo and you only need to compile it.
+  Jiffy 1.0.1 is used as json parser.  
 
 ## How to build
 - First, clone the repo and compile jiffy
  ~~~
  $> git clone https://github.com/guernik/swapi.git
- $> cd swapi/deps/jiffy
  $> rebar3 compile
  ~~~
 - Now, compile the source files and give execution permissions to main erl file
