@@ -1,6 +1,6 @@
 # SWAPI
   [![Build Status](https://www.travis-ci.com/Guernik/swapi.svg?branch=master)](https://www.travis-ci.com/Guernik/swapi)  
-  
+
   Simple erlang application, implemented as [escript](http://erlang.org/doc/man/escript.html), that given two star wars characters, returns a list of movies both have in common.  
   Data sources is [The Star Wars Api](https://swapi.co/)  
 
@@ -8,10 +8,11 @@
 ## Prerequsites
 You should have the following installed in your system in order to run this application
 - [Erlang/OTP 22](https://www.erlang.org/downloads/22.0)
-- make
+- [rebar3](https://github.com/erlang/rebar3)
+
 ### Dependencies
   Jiffy 1.0.1 is used as json parser.
-  It is already included in the repo, you just have to compile it.
+  It is already included in the repo and you only need to compile it.
 
 ## How to build
 - First, clone the repo and compile jiffy
@@ -20,7 +21,7 @@ You should have the following installed in your system in order to run this appl
  $> cd swapi/deps/jiffy
  $> rebar3 compile
  ~~~
-- Now, compile the source files, and give execution permissions to main erl file
+- Now, compile the source files and give execution permissions to main erl file
 ~~~
 swapi $> erlc src/http_reqs.erl src/utils.erl src/sw_data.erl
 swapi $> chmod a+x swapi.erl
@@ -54,7 +55,7 @@ swapi $>   Revenge of the Sith
 ~~~
 
 ## Validations
- The program makes the following validations:
+ The program performs the following validations:
   - Correct number of parameters
   ~~~
   swapi $> ./swapi.erl luke
