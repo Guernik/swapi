@@ -73,3 +73,8 @@ swapi $>   Revenge of the Sith
   swapi $>  No Star Wars character found for "Spock"
   ~~~
 
+### TODO
+- Make http requests async
+- Implement meck or a similar mock framework for unit tests
+- Implement build process with a Makefile, or change project nature to a rebar3 escript app
+
