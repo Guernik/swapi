@@ -27,10 +27,14 @@ start_inet_sll() ->
   ssl:start().
 
 get_film_list_for_chars([CharA,CharB]) ->
-  CharacterMapA = get_character(CharA),
-  CharacterMapB = get_character(CharB),
-  FilmIdListA = get_films_id_from_character_map(CharacterMapA),
-  FilmIdListB = get_films_id_from_character_map(CharacterMapB),
+  FilmIdListA = case get_character(CharA) of 
+    {ok,CharacterMapA} -> get_films_id_from_character_map(CharacterMapA);
+    {error,_} -> [] %do nothing, but match the error
+  end,
+  FilmIdListB = case get_character(CharB) of 
+    {ok,CharacterMapB} -> get_films_id_from_character_map(CharacterMapB);
+    {error,_} -> [] %do nothing, but match the error
+  end,  
   SetA = sets:from_list(FilmIdListA),
   SetB = sets:from_list(FilmIdListB),
   SetC = sets:intersection(SetA,SetB),
@@ -58,13 +62,15 @@ get_character(CharacterName) ->
 
 treat_result(Count,JsonSearchResult,_CharName) when Count =:= 1 ->
   ResultList = maps:get(<<"results">>,JsonSearchResult),
-  hd(ResultList);
+  {ok,hd(ResultList)};
   
 treat_result(Count,_JsonSearchResult, CharName) when Count > 1 ->
-  io:format("More than one posible character for the input ~p~n",[CharName]);
+  io:format("More than one posible character for the input ~p~n",[CharName]),
+  {error,{}};
 
 treat_result(Count,_JsonSearchResult, CharName) when Count =:=  0 ->  
-  io:format("No Star Wars character found for ~p~n",[CharName]).
+  io:format("No Star Wars character found for ~p~n",[CharName]),
+  {error,{}}.
 
 
   
